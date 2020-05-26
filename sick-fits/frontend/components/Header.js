@@ -2,6 +2,23 @@ import React from "react";
 import Nav from "./Nav";
 import styled from "styled-components";
 import Link from "next/link";
+import router from "next/router";
+import NProgress from "nprogress";
+
+router.onRouteChangeStart = () => {
+  console.log("onRouteChangeStart triggered");
+  NProgress.start();
+};
+
+router.onRouteChangeComplete = () => {
+  console.log("onRouteChangeComplete triggered");
+  NProgress.done();
+};
+
+router.onRouteChangeError = () => {
+  console.log("onRouteChangeError triggered");
+  NProgress.done();
+};
 
 const Header = (props) => {
   return (
