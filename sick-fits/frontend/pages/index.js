@@ -1,7 +1,10 @@
+import { Items } from "../components/Items";
+import React from "react";
+
 const Home = (props) => {
   return (
     <div>
-      <p>Home!</p>
+      <Items />
     </div>
   );
 };

@@ -1,14 +1,11 @@
-import styled from "styled-components";
-import Link from "next/link";
+import { CreateItem } from "../components/CreateItem";
 
 const Sell = (props) => {
   return (
     <div>
-      <p>Sell!</p>
+      <CreateItem />
     </div>
   );
 };
 
 export default Sell;
-
-const StyledHome = styled.div``;
