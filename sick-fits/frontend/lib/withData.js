@@ -1,7 +1,7 @@
 import withApollo from "next-with-apollo";
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 import { endpoint } from "../config";
-import getDataFromTree from "next-with-apollo/lib/getDataFromTree";
+import { getDataFromTree } from "@apollo/react-ssr";
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
