@@ -1,20 +1,29 @@
 import withApollo from "next-with-apollo";
-import ApolloClient from "apollo-boost";
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 import { endpoint } from "../config";
+import getDataFromTree from "next-with-apollo/lib/getDataFromTree";
+
+const cache = new InMemoryCache();
+const link = new HttpLink({
+  uri: process.env.NODE_ENV === "development" ? endpoint : endpoint,
+});
 
 function createClient({ headers }) {
   return new ApolloClient({
-    connectToDevTools: true,
-    uri: process.env.NODE_ENV === "development" ? endpoint : endpoint,
-    request: (operation) => {
-      operation.setContext({
-        fetchOptions: {
-          credentials: "include",
-        },
-        headers,
-      });
+    // Provide required constructor fields
+    cache: cache,
+    link: link,
+
+    // Provide some optional constructor fields
+    name: "react-web-client",
+    version: "1.3",
+    queryDeduplication: false,
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: "cache-and-network",
+      },
     },
   });
 }
 
-export default withApollo(createClient);
+export default withApollo(createClient, { getDataFromTree });

@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import gql from "graphql-tag";
-import { Mutation } from "react-apollo";
 import { ALL_ITEMS_QUERY } from "./Items";
+import { useMutation } from "@apollo/client";
 
 const DELETE_ITEM_MUTATION = gql`
   mutation DELETE_ITEM_MUTATION($id: ID!) {
@@ -13,6 +13,10 @@ const DELETE_ITEM_MUTATION = gql`
 `;
 
 export const DeleteItem = (props) => {
+  const [deleteItem, { error }] = useMutation(DELETE_ITEM_MUTATION, {
+    variables: { id: props.id },
+    update: update,
+  });
   const update = (cache, payload) => {
     // manually update the cache on the client, so it matches the server
     // 1 Read the cache for the items we want
@@ -27,23 +31,15 @@ export const DeleteItem = (props) => {
   };
 
   return (
-    <Mutation
-      mutation={DELETE_ITEM_MUTATION}
-      variables={{ id: props.id }}
-      update={update}
+    <button
+      onClick={async () => {
+        if (confirm("Are you sure you want to delete this item?")) {
+          await deleteItem();
+        }
+      }}
     >
-      {(deleteItem, { error }) => (
-        <button
-          onClick={() => {
-            if (confirm("Are you sure you want to delete this item?")) {
-              deleteItem();
-            }
-          }}
-        >
-          {props.children}
-        </button>
-      )}
-    </Mutation>
+      {props.children}
+    </button>
   );
 };
 
